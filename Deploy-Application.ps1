@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 	This script performs the installation or uninstallation of an application(s).
 	# LICENSE #
@@ -38,8 +38,8 @@
 	http://psappdeploytoolkit.com
 #>
 [CmdletBinding()]
-## Suppress PSScriptAnalyzer errors for not using declared variables during Appveyor build
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification="Suppresses Appveyor errors on informational variables below")]
+## Suppress PSScriptAnalyzer errors for not using declared variables during AppVeyor build
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification="Suppresses AppVeyor errors on informational variables below")]
 Param (
 	[Parameter(Mandatory=$false)]
 	[ValidateSet('Install','Uninstall')]
@@ -63,15 +63,15 @@ Try {
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	[string]$appVendor = ''
-	[string]$appName = ''
-	[string]$appVersion = ''
-	[string]$appArch = ''
+	[string]$appVendor = 'Factset'
+	[string]$appName = 'Factset 2016'
+	[string]$appVersion = '2016 9E'
+	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '3.7.0.1'
-	[string]$appScriptDate = '03/22/2018'
-	[string]$appScriptAuthor = '<author name>'
+	[string]$appScriptDate = '06/25/2018'
+	[string]$appScriptAuthor = 'Steve Patterson'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
@@ -119,7 +119,7 @@ Try {
 		[string]$installPhase = 'Pre-Installation'
 
 		## Show Welcome Message, close Internet Explorer if needed, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps 'iexplore' -CheckDiskSpace -PersistPrompt
+		Show-InstallationWelcome -CloseApps 'fdsw32' -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -139,7 +139,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-
+		Execute-MSI -Action "Install" -Path "FactSet_Setup_2016_9E_x64.msi" -Parameters "/qb ALLUSERS=1" -PassThru
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -161,7 +161,7 @@ Try {
 		[string]$installPhase = 'Pre-Uninstallation'
 
 		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-		Show-InstallationWelcome -CloseApps 'iexplore' -CloseAppsCountdown 60
+		Show-InstallationWelcome -CloseApps 'fdsw32' -CloseAppsCountdown 60
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -181,7 +181,7 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-
+		Execute-MSI -Action "Uninstall" -Path "FactSet_Setup_2016_9E_x64.msi" -PassThru
 
 		##*===============================================
 		##* POST-UNINSTALLATION
